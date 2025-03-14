@@ -29,7 +29,6 @@ class ViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 70, weight: .bold)
-//        label.font = UIFont.systemFont(ofSize: 30, weight: .medium)
         label.text = "25 ºC"
         label.textAlignment = .left
         label.textColor = UIColor(named: "primaryColor")
@@ -83,7 +82,7 @@ class ViewController: UIViewController {
     private lazy var velocityLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Velocidade"
+        label.text = "Vento"
         label.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
         label.textColor = UIColor.white
         return label
@@ -92,7 +91,7 @@ class ViewController: UIViewController {
     private lazy var velocityValueLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "1000 km/h"
+        label.text = "10 km/h"
         label.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
         label.textColor = UIColor.white
         return label
@@ -103,6 +102,18 @@ class ViewController: UIViewController {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+    
+    private lazy var statsStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [humiditySTackView, velocityStackView])
+        stackView.axis = .vertical
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.spacing = 3
+        stackView.backgroundColor = UIColor(named: "softgray")
+        stackView.layer.cornerRadius = 10
+        stackView.isLayoutMarginsRelativeArrangement = true
+        stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 12, leading: 24, bottom: 12, trailing: 24)
         return stackView
     }()
 
@@ -135,6 +146,7 @@ class ViewController: UIViewController {
         view.addSubview(headerView)
         view.addSubview(humiditySTackView)
         view.addSubview(velocityStackView)
+        view.addSubview(statsStackView)
         
         headerView.addSubview(cityLabel)
         headerView.addSubview(temperaturaLabel)
