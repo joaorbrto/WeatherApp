@@ -8,7 +8,6 @@
 import UIKit
 
 class ViewController: UIViewController {
-    
     private lazy var backgroundview: UIView = {
         let view = UIImageView(frame: .zero)
         view.image = UIImage(named: "background")
@@ -124,6 +123,7 @@ class ViewController: UIViewController {
         label.text = "PREVISÃO POR HORA"
         label.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
         label.textColor = .white
+        label.textAlignment = .center
         return label
     }()
     
@@ -140,25 +140,48 @@ class ViewController: UIViewController {
         return collectionView
     }()
     
+    private var dailyForecastLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "PROXIMOS DIAS"
+        label.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        label.textColor = .white
+        label.textAlignment = .center
+        return label
+    }()
+    
+    private lazy var dailyForecastTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.backgroundColor = .clear
+        tableView.dataSource = self
+        tableView.register(DailyForecastTableViewCell.self, forCellReuseIdentifier: DailyForecastTableViewCell.identifier)
+        return tableView
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
     }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
     }
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
     }
     
     private func setupView(){
-        view.backgroundColor = .red
+        view.backgroundColor = .clear
         
         view.addSubview(backgroundview)
         setHierarchy()
@@ -174,6 +197,8 @@ class ViewController: UIViewController {
         view.addSubview(statsStackView)
         view.addSubview(hourlyForecastLabel)
         view.addSubview(hourlyForecastCollectionView)
+        view.addSubview(dailyForecastLabel)
+        view.addSubview(dailyForecastTableView)
         
         headerView.addSubview(cityLabel)
         headerView.addSubview(temperaturaLabel)
@@ -199,7 +224,7 @@ class ViewController: UIViewController {
             headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: 60),
             headerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,constant: 35),
             headerView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,constant: -35),
-            headerView.heightAnchor.constraint(equalToConstant: 169),
+            headerView.heightAnchor.constraint(equalToConstant: 150),
             
         ])
         
@@ -243,6 +268,18 @@ class ViewController: UIViewController {
             hourlyForecastCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
         
+        NSLayoutConstraint.activate([
+            dailyForecastLabel.topAnchor.constraint(equalTo: hourlyForecastCollectionView.bottomAnchor, constant: 29),
+            dailyForecastLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 35),
+            dailyForecastLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -35),
+
+            dailyForecastTableView.topAnchor.constraint(equalTo: dailyForecastLabel.bottomAnchor, constant: 30),
+            dailyForecastTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            dailyForecastTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            dailyForecastTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+
+        
     }
     
 }
@@ -258,6 +295,19 @@ extension ViewController : UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HourlyForecastCollectionViewCell.identifier, for: indexPath) as! HourlyForecastCollectionViewCell
         return cell
     }
+}
+
+extension ViewController : UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 10
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: DailyForecastTableViewCell.identifier, for: indexPath)
+        return cell
+    }
+
+    
 }
 
 #Preview{
